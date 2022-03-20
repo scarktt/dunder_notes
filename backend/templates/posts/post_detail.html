@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="row">
+	<div class="col-4 offset-4">
+	    <div class="card" style="padding: 10px">
+		<h1>{{ object.title }}</h1>
+		<img src="{{ object.thumbnail.url }}" class="card-img-top" alt="">
+		<hr>
+
+		<div>
+		    <p>{{ object.content }}</p>
+		</div>
+		<hr>
+
+		{% if request.user.is_authenticated %}
+		    <h4>Leave a comment below</h4>
+		    <form method="POST">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button class="btn btn-primary" type="submit">Comment</button>
+		    </form>
+		    <hr>
+		    <h5>Comments</h5>
+		    {% for comment in object.comments %}
+			<div>
+			    <p>{{ comment.content }}</p>
+			    <br>
+			    <small>{{ comment.timestamp | timesince }} ago</small>
+			</div>
+			<hr>
+		    {% endfor %}
+		{% else %}
+		    <a href="{% url 'account_login' %}" class="btn btn-primary btn-bock">Login to comment</a>
+		{% endif %}
+		
+	    </div>
+	</div>
+    </div>
+
+{% endblock content %} 
